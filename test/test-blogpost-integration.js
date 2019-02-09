@@ -10,3 +10,43 @@ const expect = chai.expect;
 const { BlogPost } = require('./models');
 const { app, runServer, closeServer } = require('./server');
 const { TEST_DATABASE_URL } = require('./config');
+
+chai.use(chaiHttp);
+
+// use faker to generate placeholder values for 'author', 'title', 'content', 'created'
+// insert that data into mongo
+function seedBlogPostData() {
+
+};
+
+function generateAuthor() {
+
+};
+
+function generateTitle() {
+
+};
+
+function generateContent() {
+
+};
+
+function generateCreatedDate() {
+
+};
+
+function generateBlogPostData() {
+  return {
+    author: {
+      firstName: faker.name.firstName,
+      lastName: faker.name.lastName
+    },
+    title: faker.company.catchPhraseDescriptor,
+    content: faker.lorem.paragraph,
+    created: new Date.now()
+  }
+};
+
+function tearDownDb() {
+
+};
