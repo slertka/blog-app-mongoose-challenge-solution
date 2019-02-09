@@ -16,23 +16,14 @@ chai.use(chaiHttp);
 // use faker to generate placeholder values for 'author', 'title', 'content', 'created'
 // insert that data into mongo
 function seedBlogPostData() {
+  console.info('seeding blogpost data');
+  const seedData = [];
 
-};
+  for (let i=1; i<=10; i++) {
+    seedData.push(generateBlogPostData())
+  };
 
-function generateAuthor() {
-
-};
-
-function generateTitle() {
-
-};
-
-function generateContent() {
-
-};
-
-function generateCreatedDate() {
-
+  return Promise.insertMany(seedData);
 };
 
 function generateBlogPostData() {
