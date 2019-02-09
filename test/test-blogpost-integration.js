@@ -29,15 +29,16 @@ function seedBlogPostData() {
 function generateBlogPostData() {
   return {
     author: {
-      firstName: faker.name.firstName,
-      lastName: faker.name.lastName
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName()
     },
-    title: faker.company.catchPhraseDescriptor,
-    content: faker.lorem.paragraph,
+    title: faker.company.catchPhraseDescriptor(),
+    content: faker.lorem.paragraph(),
     created: new Date.now()
   }
 };
 
 function tearDownDb() {
-
+  console.warn('deleting database');
+  return mongoose.connection.dropDatabase();
 };
