@@ -68,7 +68,7 @@ describe('BlogPost API resource', function() {
   //  3) inspect response
   //  4) inspection database
   //  5) teardown database
-    describe('GET ENDPOINT', function() {
+    describe('GET endpoint', function() {
 
       it('should return all existing blogposts', function() {
         let res;
@@ -113,6 +113,41 @@ describe('BlogPost API resource', function() {
             expect(resPost.created);
           })
       })
+    });
+
+    describe('POST endpoint', function() {
+      // strategy: make a POST request with data,
+      // then prove that the blogpost we get back has
+      // right keys, and that `id` is there (which means
+      // the data was inserted into db)
+      it('should add a new blogpost', function() {
+
+        const newBlogPost = generateBlogPostData();
+        let author;
+
+        return chai.request(app)
+          .post('/posts')
+          .send(newBlogPost)
+          .then(function(res) {
+            expect(res).to.have.status(201);
+            expect(res).to.be.json;
+            expect(res.body).to.include.keys('title', 'author', 'content');
+            expect(res.body.title).to.equal(newBlogPost.title);
+            expect(res.body.content).to.equal(newBlogPost.content);
+
+            author = `${newBlogPost.author.firstName} ${newBlogPost.author.lastName}`;
+            expect(res.body.author).to.equal(author);
+
+            return BlogPost.findById(res.body.id);
+          })
+          .then(function(post) {
+            expect(post.title).to.equal(newBlogPost.title);
+            expect(post.content).to.equal(newBlogPost.content);
+            expect(post.author.firstName).to.equal(newBlogPost.author.firstName);
+            expect(post.author.lastName).to.equal(newBlogPost.author.lastName);
+          })
+      });
     })
+
 })
 
