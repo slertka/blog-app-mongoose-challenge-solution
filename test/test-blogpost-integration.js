@@ -178,7 +178,30 @@ describe('BlogPost API resource', function() {
             expect(blogPost.title).to.equal(putRequest.title);
             expect(blogPost.content).to.equal(putRequest.content);
           })
+      })
+    })
 
+    describe('DELETE endpoint', function() {
+      // strategy: 
+      // 1. Get an existing blogpost from db
+      // 2. Make a DELETE request to delete that blogpost
+      // 3. Prove database has removed blogpost
+      // 4. Prove blogpost doesn't exist anymore
+      it('should delete an existing blogpost', function() {
+        let post;
+        return BlogPost.findOne()
+          .then(function(_post) {
+            post = _post;
+            return chai.request(app)
+              .delete(`/posts/${post.id}`)
+          })
+          .then(function(res) {
+            expect(res).to.be.status(204);
+            return BlogPost.findById(post.id)
+          })
+          .then(function(_post) {
+            expect(_post).to.be.null;
+          });
       })
     })
 })
