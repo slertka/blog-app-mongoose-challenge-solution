@@ -149,5 +149,37 @@ describe('BlogPost API resource', function() {
       });
     })
 
+
+    describe('PUT endpoint', function() {
+      // strategy:
+      //  1. Get an existing blogpost from db
+      //  2. Make a PUT request to update that blogpost
+      //  3. Prove restaurant returned by request contains data we sent
+      //  4. Prove restaurant in db is correctly updated
+
+      it('should update an existing blogpost', function() {
+        const putRequest = {
+          title: 'updated title',
+          content: 'updated content'
+        };
+
+        return BlogPost.findOne()
+          .then(function(post) {
+            putRequest.id = post.id
+            return chai.request(app)
+              .put(`/posts/${post.id}`)
+              .send(putRequest)
+          })
+          .then(function(res) {
+            expect(res).to.have.status(204);
+            return BlogPost.findById(putRequest.id);
+          })
+          .then(function(blogPost) {
+            expect(blogPost.title).to.equal(putRequest.title);
+            expect(blogPost.content).to.equal(putRequest.content);
+          })
+
+      })
+    })
 })
 
